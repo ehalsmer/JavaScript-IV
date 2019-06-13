@@ -54,7 +54,19 @@ console.log(george.demo('functors'));
 // console.log(george.grade('Emily', 'Algebra'));
 
     // Project Manger Class
-
+    class ProjectManager extends Instructor {
+        constructor(pmAttributes){
+            super(pmAttributes);
+            this.gradClassName = pmAttributes.gradClassName;
+            this.favInstructor = pmAttributes.favInstructor;
+        };
+        standUp(slackChannel){
+            return `${this.name} announces to ${slackChannel}, @channel standup times!`;
+        };
+        debugsCode(student, subject){
+            return `${this.name} debugs ${student.name}'s code on ${subject}.`;
+        };
+    };
 
 // Student Class
 
@@ -91,7 +103,19 @@ console.log(alice);
 console.log(alice.speak()); // method inherited from Person class
 alice.listsSubjects(); // see console output, or line 70
 
+const eleanor = new ProjectManager({
+    name: 'Eleanor',
+    age: 27,
+    location: 'Pennsylvania',
+    specialty: 'design',
+    favLanguage: 'Javascript',
+    catchPhrase: "Have you tried Less?",
+    gradClassName: "Web19",
+    favInstructor: "Dan Levy"
+})
 
+console.log(eleanor);
 
-
+console.log(eleanor.standUp('Web21'));
+console.log(eleanor.debugsCode(alice, 'prototypal inheritance'))
 
