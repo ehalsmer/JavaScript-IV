@@ -37,16 +37,6 @@ class GameObject {
     };
 };
 
-//  Testing GameObject:
-//   const testObject = new GameObject({
-//     createdAt: 'December',
-//     name: 'Alice',
-//     dimensions: '34x32'
-//   })
-  
-//   console.log(testObject);
-//   console.log(testObject.destroy());
-  
   /*
     === CharacterStats ===
     * healthPoints
@@ -63,20 +53,6 @@ class CharacterStats extends GameObject {
         return `${this.name} took damage.`; 
     };
 };
-  
-  
-//   Testing CharacterStats:
-//   const testChar = new CharacterStats({
-//     createdAt: 'January',
-//     name: 'George',
-//     dimensions: '34x32',
-//     healthPoints: 109
-//   })
-
-//   console.log(testChar);
-//   console.log(testChar.takeDamage());
-//   console.log(testChar.destroy()); // Checking that we've inherited the destroy() method from GameObject
-  
   
   /*
     === Humanoid (Having an appearance or character resembling that of a human.) ===
@@ -98,64 +74,67 @@ class Humanoid extends CharacterStats {
     greet(){
         return `${this.name} offers a greeting in ${this.language}`;
     };
+    attack(character){
+        return `${this.name} attacks ${character.name} with ${this.weapons}.`;
+    };
+};
+
+
+class Villain extends Humanoid {
+    constructor(villAttributes){
+        super(villAttributes);
+        this.evilness = villAttributes.evilness;
+        this.partingRemark = villAttributes.partingRemark;
+    };
+};
+
+class Hero extends Humanoid {
+    constructor(heroAttributes){
+        super(heroAttributes)
+        this.catchPhrase = heroAttributes.catchPhrase;
+        this.quest = heroAttributes.quest;
+        this.archNemesis = heroAttributes.archNemesis;
+    }
 }
 
+
+//  Villain testing:
   
-// Testing Humanoid:
-//   const testHumanoid = new Humanoid({
-//     createdAt: 'February',
-//     name: 'Lucy',
-//     dimensions: '34x32',
-//     healthPoints: 120,
-//     team: 'Stark',
-//     weapons: 'cackling laughter',
-//     language: 'wildling'
-//     }
-//   )
+  const mrMalicious = new Villain({
+    createdAt: new Date(),
+      dimensions: {
+        length: 2,
+        width: 1,
+        height: 1,
+      },
+      healthPoints: 5,
+      name: 'Mr. Malicious',
+      team: 'Mayhem',
+      weapons: [
+        'Staff of Doom',
+      ],
+      language: 'Common Tongue',
+      evilness: 8,
+      partingRemark: "Mwahahaha!"
+  })
+  
+  
+
+//   Testing Humanoid:
+  const testHumanoid = new Humanoid({
+    createdAt: 'February',
+    name: 'Lucy',
+    dimensions: '34x32',
+    healthPoints: 120,
+    team: 'Stark',
+    weapons: 'cackling laughter',
+    language: 'wildling'
+    }
+  )
   
 //   console.log(testHumanoid);
 //   console.log(testHumanoid.takeDamage());
 //   console.log(testHumanoid.destroy());
-  
-  // * Create Villain and Hero constructor functions that inherit from the Humanoid constructor function.  
-//   function Villain(villAttributes){
-//     Humanoid.call(this, villAttributes);
-//     this.evilness = villAttributes.evilness;
-//     this.partingRemark = villAttributes.partingRemark;
-//   }
-  
-//   Villain.prototype = Object.create(Humanoid.prototype);
-  
-//   Villain.prototype.attack = function(character, villain){
-//     character.healthPoints -= villain.evilness * 5;
-//     if (character.healthPoints <= 0){
-//       character.destroy();
-//       console.log(villain.partingRemark);
-//     }
-//   }
-  
-//   // Villain testing:
-  
-//   const testVillain = new Villain({
-//     createdAt: new Date(),
-//       dimensions: {
-//         length: 2,
-//         width: 1,
-//         height: 1,
-//       },
-//       healthPoints: 5,
-//       name: 'Mr. Malicious',
-//       team: 'Mayhem',
-//       weapons: [
-//         'Staff of Doom',
-//       ],
-//       language: 'Common Tongue',
-//       evilness: 8,
-//       partingRemark: "Mwahahaha!"
-//   })
-  
-//   console.log(testVillain);
-  
   /*
     * Inheritance chain: GameObject -> CharacterStats -> Humanoid
     * Instances of Humanoid should have all of the same properties as CharacterStats and GameObject.
@@ -220,7 +199,8 @@ class Humanoid extends CharacterStats {
     // console.log(testVillain.attack(archer, testVillain));
     // console.log(testVillain.attack(archer, testVillain));
     // console.log(archer.healthPoints)
-  
+    console.log(mrMalicious);
+    console.log(mrMalicious.attack(swordsman));
   
     console.log(mage.createdAt); // Today's date
     console.log(archer.dimensions); // { length: 1, width: 2, height: 4 }
