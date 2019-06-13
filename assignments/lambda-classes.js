@@ -72,6 +72,13 @@ class Student extends Person {
     sprintChallenge(subject){
         return `${this.name} has begun sprint challenge on ${subject}.`
     };
+    graduate(){
+        if (this.grade > 70){
+            return `${this.name} is ready to graduate from ${this.className}. Congratulations!`;
+        } else {
+            return `${this.name}'s grade is not high enough to graduate. Complete more assignments and have an instructor grade them.`;
+        };
+    };
 };
 
 const emily = new Person({
@@ -134,3 +141,5 @@ console.log(george.demo('functors'));
 
 console.log(emily);
 console.log(emily.speak());
+
+console.log(alice.graduate());
