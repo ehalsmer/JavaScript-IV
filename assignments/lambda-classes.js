@@ -13,15 +13,6 @@ class Person {
     };
 };
 
-const emily = new Person({
-    name: 'Emily',
-    age: '32',
-    location: 'Lafayette, Indiana'
-})
-
-console.log(emily);
-console.log(emily.speak());
-
 // Instructor Class
 
 class Instructor extends Person {
@@ -37,21 +28,13 @@ class Instructor extends Person {
     grade(student, subject){
         return `${student.name} receives a perfect score on ${subject}.`
     };
+    changeGrade(student){
+        let sign = Math.random() < 0.5 ? -1 : 1;
+        let change = sign * (Math.floor(Math.random()*10)); // Since Math.random generates a value between 0 and 1, we multiply by 10 and take floor to get an integer between 0 and 10. We then multiply by the sign (-1 or 1) which we calculated above. 
+        student.grade += change;
+        return `${student.name}'s grade changed by ${change} and is now ${student.grade}.`
+    }
 };
-
-const george = new Instructor({
-    name: 'George',
-    age: 64,
-    location: 'California',
-    specialty: 'category theory',
-    favLanguage: 'haskell',
-    catchPhrase: "Let's make a lambda"
-});
-
-console.log(george);
-console.log(george.speak());
-console.log(george.demo('functors'));
-// console.log(george.grade('Emily', 'Algebra'));
 
     // Project Manger Class
     class ProjectManager extends Instructor {
@@ -76,6 +59,7 @@ class Student extends Person {
         this.previousBackground = studAttributes.previousBackground;
         this.className = studAttributes.className;
         this.favSubjects = studAttributes.favSubjects;
+        this.grade = studAttributes.grade;
     };
     listsSubjects(){ // this function is meant to list out the student's favorite subjects, one by one
         this.favSubjects.forEach(function(subject){
@@ -90,18 +74,30 @@ class Student extends Person {
     };
 };
 
+const emily = new Person({
+    name: 'Emily',
+    age: '32',
+    location: 'Lafayette, Indiana'
+})
+
+const george = new Instructor({
+    name: 'George',
+    age: 64,
+    location: 'California',
+    specialty: 'category theory',
+    favLanguage: 'haskell',
+    catchPhrase: "Let's make a lambda"
+});
+
 const alice = new Student({
     name: 'Alice',
     age: '25',
     location: 'Oregon',
     previousBackground: 'poet',
     className: 'Web20',
-    favSubjects: ['react', 'algorithms', 'knitting', 'english literature']
+    favSubjects: ['react', 'algorithms', 'knitting', 'english literature'],
+    grade: 89
 });
-
-console.log(alice);
-console.log(alice.speak()); // method inherited from Person class
-alice.listsSubjects(); // see console output, or line 70
 
 const eleanor = new ProjectManager({
     name: 'Eleanor',
@@ -114,8 +110,27 @@ const eleanor = new ProjectManager({
     favInstructor: "Dan Levy"
 })
 
+console.log(alice);
+console.log(alice.speak()); // method inherited from Person class
+alice.listsSubjects(); // see console output, or line 70
+
 console.log(eleanor);
 
 console.log(eleanor.standUp('Web21'));
 console.log(eleanor.debugsCode(alice, 'prototypal inheritance'))
 
+console.log(george.grade(alice, 'Algebra'));
+console.log(george.changeGrade(alice));
+console.log(george.changeGrade(alice));
+console.log(george.changeGrade(alice));
+console.log(george.changeGrade(alice));
+console.log(george.changeGrade(alice));
+console.log(george.changeGrade(alice));
+
+console.log(george);
+console.log(george.speak());
+console.log(george.demo('functors'));
+
+
+console.log(emily);
+console.log(emily.speak());
