@@ -59,5 +59,39 @@ console.log(george.demo('functors'));
 // Student Class
 
 class Student extends Person {
-    
-}
+    constructor(studAttributes){
+        super(studAttributes);
+        this.previousBackground = studAttributes.previousBackground;
+        this.className = studAttributes.className;
+        this.favSubjects = studAttributes.favSubjects;
+    };
+    listsSubjects(){ // this function is meant to list out the student's favorite subjects, one by one
+        this.favSubjects.forEach(function(subject){
+            console.log(subject);
+        });
+    };
+    PRAssignment(subject){
+        return `${this.name} has submitted a PR for ${subject}.` // or student.name?
+    };
+    sprintChallenge(subject){
+        return `${this.name} has begun sprint challenge on ${subject}.`
+    };
+};
+
+const alice = new Student({
+    name: 'Alice',
+    age: '25',
+    location: 'Oregon',
+    previousBackground: 'poet',
+    className: 'Web20',
+    favSubjects: ['react', 'algorithms', 'knitting', 'english literature']
+});
+
+console.log(alice);
+console.log(alice.speak()); // method inherited from Person class
+alice.listsSubjects(); // see console output, or line 70
+
+
+
+
+
