@@ -26,24 +26,26 @@ Prototype Refactor
   * destroy() // prototype method that returns: `${this.name} was removed from the game.`
 */
 
-const GameObject = function(attributes){
-    this.createdAt = attributes.createdAt;
-    this.name = attributes.name;
-    this.dimensions = attributes.dimensions;
-  }
+class GameObject {
+    constructor(attributes){
+        this.createdAt = attributes.createdAt;
+        this.name = attributes.name;
+        this.dimensions = attributes.dimensions;
+    };
+    destroy(){
+        return `${this.name} was removed from the game.`
+    };
+};
+
+//  Testing GameObject:
+//   const testObject = new GameObject({
+//     createdAt: 'December',
+//     name: 'Alice',
+//     dimensions: '34x32'
+//   })
   
-  GameObject.prototype.destroy = function(){
-    return `${this.name} was removed from the game.`
-  }
-  
-  // const testObject = new GameObject({
-  //   createdAt: 'December',
-  //   name: 'Alice',
-  //   dimensions: '34x32'
-  // })
-  
-  // console.log(testObject);
-  // console.log(testObject.destroy());
+//   console.log(testObject);
+//   console.log(testObject.destroy());
   
   /*
     === CharacterStats ===
@@ -52,30 +54,28 @@ const GameObject = function(attributes){
     * should inherit destroy() from GameObject's prototype
   */
   
-  function CharacterStats(charAttributes){
-    GameObject.call(this, charAttributes); // Using GameObject prototype to build CharacterStats, with whatever charAttributes are provided
-    this.healthPoints = charAttributes.healthPoints; // A new attribute unique to CharacterStats, not inherited from GameObject
-  }
-  
-  CharacterStats.prototype = Object.create(GameObject.prototype); // This links GameObject and CharacterStats so that CharacterStats inherits the destroy() method. 
-  
-  // takeDamage method defined on the CharacterStats prototype. 
-  CharacterStats.prototype.takeDamage = function(){
-    return `${this.name} took damage.`;
-  };
+class CharacterStats extends GameObject {
+    constructor(charAttributes){
+        super(charAttributes);
+        this.healthPoints = charAttributes.healthPoints;
+    };
+    takeDamage(){
+        return `${this.name} took damage.`; 
+    };
+};
   
   
-  // Testing CharacterStats:
-  // const testChar = new CharacterStats({
-  //   createdAt: 'January',
-  //   name: 'George',
-  //   dimensions: '34x32',
-  //   healthPoints: 109
-  // })
-  
-  // console.log(testChar);
-  // console.log(testChar.takeDamage());
-  // console.log(testChar.destroy()); // Checking that we've inherited the destroy() method from GameObject
+//   Testing CharacterStats:
+//   const testChar = new CharacterStats({
+//     createdAt: 'January',
+//     name: 'George',
+//     dimensions: '34x32',
+//     healthPoints: 109
+//   })
+
+//   console.log(testChar);
+//   console.log(testChar.takeDamage());
+//   console.log(testChar.destroy()); // Checking that we've inherited the destroy() method from GameObject
   
   
   /*
@@ -87,75 +87,74 @@ const GameObject = function(attributes){
     * should inherit destroy() from GameObject through CharacterStats
     * should inherit takeDamage() from CharacterStats
   */
-   
-  function Humanoid(humanoidAttributes){
-    CharacterStats.call(this, humanoidAttributes);
-    this.team = humanoidAttributes.team;    // new humanoid attributes
-    this.weapons = humanoidAttributes.weapons;
-    this.language = humanoidAttributes.language;
-  }
+
+class Humanoid extends CharacterStats {
+    constructor(humanoidAttributes){
+        super(humanoidAttributes);
+        this.team = humanoidAttributes.team;
+        this.weapons = humanoidAttributes.weapons;
+        this.language = humanoidAttributes.language;
+    };
+    greet(){
+        return `${this.name} offers a greeting in ${this.language}`;
+    };
+}
+
   
-  Humanoid.prototype = Object.create(CharacterStats.prototype); // linking to CharacterStats
+// Testing Humanoid:
+//   const testHumanoid = new Humanoid({
+//     createdAt: 'February',
+//     name: 'Lucy',
+//     dimensions: '34x32',
+//     healthPoints: 120,
+//     team: 'Stark',
+//     weapons: 'cackling laughter',
+//     language: 'wildling'
+//     }
+//   )
   
-  // New humanoid specific function, greet()
-  Humanoid.prototype.greet = function(){
-    return `${this.name} offers a greeting in ${this.language}`;
-  }
-  
-  // Testing:
-  // const testHumanoid = new Humanoid({
-  //   createdAt: 'February',
-  //   name: 'Lucy',
-  //   dimensions: '34x32',
-  //   healthPoints: 120,
-  //   team: 'Stark',
-  //   weapons: 'cackling laughter',
-  //   language: 'wildling'
-  //   }
-  // )
-  
-  // console.log(testHumanoid);
-  // console.log(testHumanoid.takeDamage());
-  // console.log(testHumanoid.destroy());
+//   console.log(testHumanoid);
+//   console.log(testHumanoid.takeDamage());
+//   console.log(testHumanoid.destroy());
   
   // * Create Villain and Hero constructor functions that inherit from the Humanoid constructor function.  
-  function Villain(villAttributes){
-    Humanoid.call(this, villAttributes);
-    this.evilness = villAttributes.evilness;
-    this.partingRemark = villAttributes.partingRemark;
-  }
+//   function Villain(villAttributes){
+//     Humanoid.call(this, villAttributes);
+//     this.evilness = villAttributes.evilness;
+//     this.partingRemark = villAttributes.partingRemark;
+//   }
   
-  Villain.prototype = Object.create(Humanoid.prototype);
+//   Villain.prototype = Object.create(Humanoid.prototype);
   
-  Villain.prototype.attack = function(character, villain){
-    character.healthPoints -= villain.evilness * 5;
-    if (character.healthPoints <= 0){
-      character.destroy();
-      console.log(villain.partingRemark);
-    }
-  }
+//   Villain.prototype.attack = function(character, villain){
+//     character.healthPoints -= villain.evilness * 5;
+//     if (character.healthPoints <= 0){
+//       character.destroy();
+//       console.log(villain.partingRemark);
+//     }
+//   }
   
-  // Villain testing:
+//   // Villain testing:
   
-  const testVillain = new Villain({
-    createdAt: new Date(),
-      dimensions: {
-        length: 2,
-        width: 1,
-        height: 1,
-      },
-      healthPoints: 5,
-      name: 'Mr. Malicious',
-      team: 'Mayhem',
-      weapons: [
-        'Staff of Doom',
-      ],
-      language: 'Common Tongue',
-      evilness: 8,
-      partingRemark: "Mwahahaha!"
-  })
+//   const testVillain = new Villain({
+//     createdAt: new Date(),
+//       dimensions: {
+//         length: 2,
+//         width: 1,
+//         height: 1,
+//       },
+//       healthPoints: 5,
+//       name: 'Mr. Malicious',
+//       team: 'Mayhem',
+//       weapons: [
+//         'Staff of Doom',
+//       ],
+//       language: 'Common Tongue',
+//       evilness: 8,
+//       partingRemark: "Mwahahaha!"
+//   })
   
-  console.log(testVillain);
+//   console.log(testVillain);
   
   /*
     * Inheritance chain: GameObject -> CharacterStats -> Humanoid
@@ -216,11 +215,11 @@ const GameObject = function(attributes){
       language: 'Elvish',
     });
   
-    console.log(testVillain.attack(archer, testVillain));
-    console.log(testVillain.attack(archer, testVillain));
-    console.log(testVillain.attack(archer, testVillain));
-    console.log(testVillain.attack(archer, testVillain));
-    console.log(archer.healthPoints)
+    // console.log(testVillain.attack(archer, testVillain));
+    // console.log(testVillain.attack(archer, testVillain));
+    // console.log(testVillain.attack(archer, testVillain));
+    // console.log(testVillain.attack(archer, testVillain));
+    // console.log(archer.healthPoints)
   
   
     console.log(mage.createdAt); // Today's date
